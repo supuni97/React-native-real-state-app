@@ -13,8 +13,9 @@ export default function Index() {
       <Text
         style={{
           fontWeight: "bold",
-          fontSize: 18,
+          fontSize: 24,
           marginVertical: 10,
+          fontFamily: "Rubik-Regular",
         }}
       >
         Welcome to restate
