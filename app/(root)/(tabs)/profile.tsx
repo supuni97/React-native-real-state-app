@@ -6,12 +6,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
+  Alert,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { settings } from "@/constants/data";
+import { useGlobalContext } from "@/lib/global-povider";
+import { logout } from "@/lib/appwrite";
 
 interface SettingsItemProps {
   icon: ImageSourcePropType;
@@ -37,7 +40,18 @@ const SettingsItem = ({
 );
 
 const Profile = () => {
-  const handleLogout = async () => {};
+  const { user, refetch } = useGlobalContext();
+
+  const handleLogout = async () => {
+    const result = await logout();
+
+    if (result) {
+      Alert.alert("Success", "You have been logged out successfully");
+      refetch();
+    } else {
+      Alert.alert("Error", "An error occurred while logging out");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -51,11 +65,13 @@ const Profile = () => {
         </View>
         <View style={styles.centerRow}>
           <View style={styles.avatarWrapper}>
-            <Image source={images.avatar} style={styles.avatar} />
+            {user?.avatar && (
+              <Image source={{ uri: user.avatar }} style={styles.avatar} />
+            )}
             <TouchableOpacity style={styles.editBtn}>
               <Image source={icons.edit} style={styles.editIcon} />
             </TouchableOpacity>
-            <Text style={styles.name}>John Doe</Text>
+            {user?.name && <Text style={styles.name}>{user.name}</Text>}
           </View>
         </View>
         <View className="flex flex-col mt-10">
