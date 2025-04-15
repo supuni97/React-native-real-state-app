@@ -6,12 +6,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   ImageSourcePropType,
+  Alert,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { settings } from "@/constants/data";
+import { useGlobalContext } from "@/lib/global-provider";
+import { logout } from "@/lib/appwrite";
 
 interface SettingsItemProps {
   icon: ImageSourcePropType;
@@ -46,7 +49,17 @@ const SettingsItem = ({
 };
 
 const Profile = () => {
-  const handleLogout = async () => {};
+  const { user, refetch } = useGlobalContext();
+
+  const handleLogout = async () => {
+    const result = await logout();
+
+    if (result) {
+      Alert.alert("Success, You have been logged out successfully");
+    } else {
+      Alert.alert("Error, An error occurred while logging out");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,11 +74,11 @@ const Profile = () => {
 
         <View style={styles.centerRow}>
           <View style={styles.profileContainer}>
-            <Image source={images.avatar} style={styles.avatar} />
+            <Image source={{ uri: user?.avatar }} style={styles.avatar} />
             <TouchableOpacity style={styles.editIconWrapper}>
               <Image source={icons.edit} style={styles.editIcon} />
             </TouchableOpacity>
-            <Text style={styles.username}>John Doe</Text>
+            <Text style={styles.username}>{user?.name}</Text>
           </View>
         </View>
 
