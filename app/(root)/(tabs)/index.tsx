@@ -3,6 +3,7 @@ import images from "@/constants/images";
 import { Link } from "expo-router";
 import { Text, View, Image, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Search from "@/components/Search";
 
 export default function Index() {
   return (
@@ -19,6 +20,7 @@ export default function Index() {
           <Image source={icons.bell} style={styles.bellIcon} />
         </View>
       </View>
+      <Search />
     </SafeAreaView>
   );
 }
