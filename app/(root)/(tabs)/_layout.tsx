@@ -72,7 +72,7 @@ const TabsLayout = () => {
           title: "Profile",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={icons.home} focused={focused} title="Profile" />
+            <TabIcon icon={icons.person} focused={focused} title="Profile" />
           ),
         }}
       />
