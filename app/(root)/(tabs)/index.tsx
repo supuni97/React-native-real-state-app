@@ -1,9 +1,9 @@
 import icons from "@/constants/icons";
 import images from "@/constants/images";
-import { Link } from "expo-router";
-import { Text, View, Image, StyleSheet } from "react-native";
+import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Search from "@/components/Search";
+import { Card, FeaturedCard } from "@/components/Cards";
 
 export default function Index() {
   return (
@@ -19,8 +19,36 @@ export default function Index() {
           </View>
           <Image source={icons.bell} style={styles.bellIcon} />
         </View>
+
+        <Search />
+
+        <View style={styles.featuredSection}>
+          <View style={styles.featuredHeader}>
+            <Text style={styles.featuredTitle}>Featured</Text>
+            <TouchableOpacity>
+              <Text style={styles.seeAll}>See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.featuredCardsRow}>
+            <FeaturedCard />
+            <FeaturedCard />
+            <FeaturedCard />
+          </View>
+        </View>
+
+        {/* ⬇️ Moved this inside container! */}
+        <View style={styles.featuredHeader}>
+          <Text style={styles.featuredTitle}>Our Recommendation</Text>
+          <TouchableOpacity>
+            <Text style={styles.seeAll}>See All</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.cardRow}>
+          <Card />
+          <Card />
+        </View>
       </View>
-      <Search />
     </SafeAreaView>
   );
 }
@@ -28,17 +56,27 @@ export default function Index() {
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: "white",
-    height: "100%",
     flex: 1,
+    height: "100%",
+  },
+  cardRow: {
+    flexDirection: "row",
+    gap: 20, // gap-5 = 20px
+    marginTop: 20, // mt-5 = 20px
   },
   container: {
-    paddingHorizontal: 20, // px-5
+    paddingHorizontal: 20,
+  },
+  featuredCardsRow: {
+    flexDirection: "row",
+    gap: 20, // Tailwind gap-5 => 20px
+    marginTop: 20, // Tailwind mt-5 => 20px
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 20, // mt-5 = 1.25rem = 20px
+    marginTop: 20,
   },
   profileContainer: {
     flexDirection: "row",
@@ -46,27 +84,43 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 48,
-    height: 48, // size-12 = 3rem = 48px
+    height: 48,
     borderRadius: 24,
   },
   textContainer: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "center",
-    marginTop: 8, // mt-2 = 0.5rem = 8px
+    marginLeft: 12,
+    marginTop: 8,
   },
   greeting: {
     fontSize: 12,
     fontFamily: "Rubik-Regular",
-    color: "#B0B0B0", // equivalent to text-black-100
+    color: "#B0B0B0",
   },
   username: {
     fontSize: 16,
     fontFamily: "Rubik-Medium",
-    color: "#4B4B4B", // equivalent to text-black-300
+    color: "#4B4B4B",
   },
   bellIcon: {
     width: 24,
-    height: 24, // size-6 = 1.5rem = 24px
+    height: 24,
+  },
+  featuredSection: {
+    marginVertical: 20,
+  },
+  featuredHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  featuredTitle: {
+    fontSize: 20,
+    fontFamily: "Rubik-Bold",
+    color: "#4B4B4B",
+  },
+  seeAll: {
+    fontSize: 16,
+    fontFamily: "Rubik-Bold",
+    color: "#4C9EEB",
   },
 });
