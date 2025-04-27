@@ -4,6 +4,7 @@ import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Search from "@/components/Search";
 import { Card, FeaturedCard } from "@/components/Cards";
+import Filters from "@/components/Filters";
 
 export default function Index() {
   return (
@@ -44,6 +45,7 @@ export default function Index() {
             <Text style={styles.seeAll}>See All</Text>
           </TouchableOpacity>
         </View>
+        <Filters />
         <View style={styles.cardRow}>
           <Card />
           <Card />
