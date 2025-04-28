@@ -12,8 +12,11 @@ import { Card, FeaturedCard } from "@/components/Cards";
 import Filters from "@/components/Filters";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+import { useGlobalContext } from "@/lib/global-provider";
 
 export default function Index() {
+  const { user } = useGlobalContext();
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Main FlatList */}
@@ -31,10 +34,10 @@ export default function Index() {
               {/* Header */}
               <View style={styles.header}>
                 <View style={styles.profileContainer}>
-                  <Image source={images.avatar} style={styles.avatar} />
+                  <Image source={{ uri: user?.avatar }} style={styles.avatar} />
                   <View style={styles.textContainer}>
                     <Text style={styles.greeting}>Good Morning</Text>
-                    <Text style={styles.username}>John Doe</Text>
+                    <Text style={styles.username}>{user?.name}</Text>
                   </View>
                 </View>
                 <Image source={icons.bell} style={styles.bellIcon} />
