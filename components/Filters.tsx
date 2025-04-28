@@ -59,17 +59,17 @@ export default Filters;
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    marginTop: 12, // mt-3
-    marginBottom: 8, // mb-2
-    paddingLeft: 20,
+    marginTop: 12,
+    marginBottom: 8,
+    paddingLeft: 0,
   },
   categoryButton: {
     flexDirection: "column",
     alignItems: "flex-start",
-    marginRight: 16, // mr-4
-    paddingHorizontal: 16, // px-4
-    paddingVertical: 16, // py-4
-    borderRadius: 999, // rounded-full
+    marginRight: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    borderRadius: 999,
     backgroundColor: "#f2f2f2",
   },
   activeCategory: {

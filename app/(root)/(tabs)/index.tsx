@@ -1,78 +1,127 @@
-import icons from "@/constants/icons";
-import images from "@/constants/images";
-import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Search from "@/components/Search";
 import { Card, FeaturedCard } from "@/components/Cards";
 import Filters from "@/components/Filters";
+import images from "@/constants/images";
+import icons from "@/constants/icons";
 
 export default function Index() {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.profileContainer}>
-            <Image source={images.avatar} style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.greeting}>Good Morning</Text>
-              <Text style={styles.username}>John Doe</Text>
+      {/* Main FlatList */}
+      <FlatList
+        data={[1, 2, 3, 4]}
+        keyExtractor={(item) => item.toString()}
+        horizontal={false}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.flatListContainer2}
+        columnWrapperStyle={styles.columnWrapper}
+        ListHeaderComponent={
+          <>
+            <View style={styles.container}>
+              {/* Header */}
+              <View style={styles.header}>
+                <View style={styles.profileContainer}>
+                  <Image source={images.avatar} style={styles.avatar} />
+                  <View style={styles.textContainer}>
+                    <Text style={styles.greeting}>Good Morning</Text>
+                    <Text style={styles.username}>John Doe</Text>
+                  </View>
+                </View>
+                <Image source={icons.bell} style={styles.bellIcon} />
+              </View>
+
+              {/* Search */}
+              <Search />
+
+              {/* Featured Section */}
+              <View style={styles.featuredSection}>
+                <View style={styles.featuredHeader}>
+                  <Text style={styles.featuredTitle}>Featured</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.seeAll}>See All</Text>
+                  </TouchableOpacity>
+                </View>
+                <FlatList
+                  data={[1, 2, 3]}
+                  renderItem={({ item }) => <FeaturedCard />}
+                  keyExtractor={(item) => item.toString()}
+                  horizontal
+                  bounces={false}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    gap: 20, // gap between items
+                    marginTop: 20, // marginTop
+                    paddingRight: 20, // optional, if you want padding
+                  }}
+                />
+              </View>
+
+              {/* Recommendations Section */}
+              <View style={styles.featuredHeader}>
+                <Text style={styles.featuredTitle}>Our Recommendation</Text>
+                <TouchableOpacity>
+                  <Text style={styles.seeAll}>See All</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Filters */}
+              <Filters />
             </View>
+          </>
+        }
+        renderItem={({ item }) => (
+          <View style={styles.listItem}>
+            {/* You can render your Cards or items here */}
+            <Card />
           </View>
-          <Image source={icons.bell} style={styles.bellIcon} />
-        </View>
-
-        <Search />
-
-        <View style={styles.featuredSection}>
-          <View style={styles.featuredHeader}>
-            <Text style={styles.featuredTitle}>Featured</Text>
-            <TouchableOpacity>
-              <Text style={styles.seeAll}>See All</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.featuredCardsRow}>
-            <FeaturedCard />
-            <FeaturedCard />
-            <FeaturedCard />
-          </View>
-        </View>
-
-        {/* ⬇️ Moved this inside container! */}
-        <View style={styles.featuredHeader}>
-          <Text style={styles.featuredTitle}>Our Recommendation</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAll}>See All</Text>
-          </TouchableOpacity>
-        </View>
-        <Filters />
-        <View style={styles.cardRow}>
-          <Card />
-          <Card />
-        </View>
-      </View>
+        )}
+      />
     </SafeAreaView>
   );
 }
 
+// 🔥 STYLES
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: "white",
     flex: 1,
-    height: "100%",
   },
-  cardRow: {
-    flexDirection: "row",
-    gap: 20, // gap-5 = 20px
-    marginTop: 20, // mt-5 = 20px
+  flatListContainer2: {
+    paddingBottom: 128,
+    paddingTop: 10,
+  },
+  columnWrapper: {
+    flex: 1,
+    justifyContent: "space-between",
+    paddingHorizontal: 30,
+  },
+
+  flatListContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   container: {
     paddingHorizontal: 20,
   },
+  cardRow: {
+    flexDirection: "row",
+    gap: 20,
+    marginTop: 20,
+  },
   featuredCardsRow: {
     flexDirection: "row",
-    gap: 20, // Tailwind gap-5 => 20px
-    marginTop: 20, // Tailwind mt-5 => 20px
+    gap: 20,
+    marginTop: 20,
   },
   header: {
     flexDirection: "row",
@@ -124,5 +173,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Rubik-Bold",
     color: "#4C9EEB",
+  },
+  listItem: {
+    marginTop: 20,
   },
 });
