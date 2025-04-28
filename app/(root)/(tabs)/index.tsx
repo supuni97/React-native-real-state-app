@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  Button,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Search from "@/components/Search";
@@ -13,13 +14,17 @@ import Filters from "@/components/Filters";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
 import { useGlobalContext } from "@/lib/global-provider";
+import seed from "@/lib/seed";
 
 export default function Index() {
   const { user } = useGlobalContext();
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Main FlatList */}
+      {/* <View style={{ padding: 20 }}>
+        <Button title="Seed" onPress={seed} />
+      </View> */}
+
       <FlatList
         data={[1, 2, 3, 4]}
         keyExtractor={(item) => item.toString()}
@@ -55,16 +60,16 @@ export default function Index() {
                   </TouchableOpacity>
                 </View>
                 <FlatList
-                  data={[1, 2, 3]}
+                  data={[5, 6, 7]}
                   renderItem={({ item }) => <FeaturedCard />}
                   keyExtractor={(item) => item.toString()}
                   horizontal
                   bounces={false}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
-                    gap: 20, // gap between items
-                    marginTop: 20, // marginTop
-                    paddingRight: 20, // optional, if you want padding
+                    gap: 20,
+                    marginTop: 20,
+                    paddingRight: 20,
                   }}
                 />
               </View>
@@ -84,7 +89,6 @@ export default function Index() {
         }
         renderItem={({ item }) => (
           <View style={styles.listItem}>
-            {/* You can render your Cards or items here */}
             <Card />
           </View>
         )}
@@ -108,23 +112,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 30,
   },
-
-  flatListContainer: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
   container: {
     paddingHorizontal: 20,
-  },
-  cardRow: {
-    flexDirection: "row",
-    gap: 20,
-    marginTop: 20,
-  },
-  featuredCardsRow: {
-    flexDirection: "row",
-    gap: 20,
-    marginTop: 20,
   },
   header: {
     flexDirection: "row",
