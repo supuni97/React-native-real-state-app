@@ -2,30 +2,35 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import React from "react";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+import { Models } from "appwrite";
 
 interface Props {
+  item: Models.Document;
   onPress?: () => void;
 }
 
-export const FeaturedCard = ({ onPress }: Props) => {
+export const FeaturedCard = ({
+  item: { image, rating, name, address, price },
+  onPress,
+}: Props) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.featuredCard}>
-      <Image source={images.japan} style={styles.featuredImage} />
+      <Image source={{ uri: image }} style={styles.featuredImage} />
       <Image source={images.cardGradient} style={styles.gradientImage} />
 
       <View style={styles.ratingBadge}>
         <Image source={icons.star} style={styles.starIcon} />
-        <Text style={styles.ratingText}>4.4</Text>
+        <Text style={styles.ratingText}>{rating}</Text>
       </View>
 
       <View style={styles.infoContainer}>
         <Text style={styles.titleText} numberOfLines={1}>
-          Modern Apartment
+          {name}
         </Text>
-        <Text style={styles.addressText}>22 W 15th ST, New York</Text>
+        <Text style={styles.addressText}>{address}</Text>
 
         <View style={styles.priceRow}>
-          <Text style={styles.priceText}>$2,500</Text>
+          <Text style={styles.priceText}>${price}</Text>
           <Image source={icons.heart} style={styles.heartIcon} />
         </View>
       </View>
@@ -33,7 +38,10 @@ export const FeaturedCard = ({ onPress }: Props) => {
   );
 };
 
-export const Card = ({ onPress }: Props) => {
+export const Card = ({
+  item: { image, rating, name, address, price },
+  onPress,
+}: Props) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.card}>
       <View style={styles.cardRatingBadge}>
@@ -41,16 +49,16 @@ export const Card = ({ onPress }: Props) => {
         <Text style={styles.cardRatingText}>4.4</Text>
       </View>
 
-      <Image source={images.newYork} style={styles.cardImage} />
+      <Image source={{ uri: image }} style={styles.cardImage} />
 
       <View style={styles.cardInfoContainer}>
         <Text style={styles.cardTitle} numberOfLines={1}>
-          Cozy Studio
+          {name}
         </Text>
-        <Text style={styles.cardAddress}>22 W 15th St, New York</Text>
+        <Text style={styles.cardAddress}>{address}</Text>
 
         <View style={styles.cardPriceRow}>
-          <Text style={styles.cardPriceText}>$2,500</Text>
+          <Text style={styles.cardPriceText}>${price}</Text>
           <Image source={icons.heart} style={styles.cardHeartIcon} />
         </View>
       </View>

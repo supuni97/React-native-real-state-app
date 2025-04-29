@@ -5,91 +5,119 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  Button,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Search from "@/components/Search";
 import { Card, FeaturedCard } from "@/components/Cards";
 import Filters from "@/components/Filters";
-import images from "@/constants/images";
 import icons from "@/constants/icons";
 import { useGlobalContext } from "@/lib/global-provider";
-import seed from "@/lib/seed";
+import { router, useLocalSearchParams } from "expo-router";
+import { useAppwrite } from "@/lib/useAppwrite";
+import { getLatestProperties, getProperties } from "@/lib/appwrite";
+import { useEffect } from "react";
 
 export default function Index() {
   const { user } = useGlobalContext();
+  const params = useLocalSearchParams<{ query?: string; filter?: string }>();
+
+  const { data: latestProperties, loading: latestPropertiesLoading } =
+    useAppwrite({ fn: getLatestProperties });
+
+  const {
+    data: properties,
+    loading,
+    refetch,
+  } = useAppwrite({
+    fn: getProperties,
+    params: {
+      filter: params.filter ?? "",
+      query: params.query ?? "",
+      limit: 6,
+    },
+    skip: true,
+  });
+
+  const handleCardPress = (id: string) => router.push(`/properties/${id}`);
+
+  useEffect(() => {
+    refetch({
+      filter: params.filter ?? "",
+      query: params.query ?? "",
+      limit: 6,
+    });
+  }, [params.filter, params.query]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* <View style={{ padding: 20 }}>
-        <Button title="Seed" onPress={seed} />
-      </View> */}
-
       <FlatList
-        data={[1, 2, 3, 4]}
-        keyExtractor={(item) => item.toString()}
+        data={properties ?? []}
+        keyExtractor={(item) => item.$id}
         horizontal={false}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatListContainer2}
         columnWrapperStyle={styles.columnWrapper}
         ListHeaderComponent={
-          <>
-            <View style={styles.container}>
-              {/* Header */}
-              <View style={styles.header}>
-                <View style={styles.profileContainer}>
-                  <Image source={{ uri: user?.avatar }} style={styles.avatar} />
-                  <View style={styles.textContainer}>
-                    <Text style={styles.greeting}>Good Morning</Text>
-                    <Text style={styles.username}>{user?.name}</Text>
-                  </View>
+          <View style={styles.container}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.profileContainer}>
+                <Image source={{ uri: user?.avatar }} style={styles.avatar} />
+                <View style={styles.textContainer}>
+                  <Text style={styles.greeting}>Good Morning</Text>
+                  <Text style={styles.username}>{user?.name}</Text>
                 </View>
-                <Image source={icons.bell} style={styles.bellIcon} />
               </View>
+              <Image source={icons.bell} style={styles.bellIcon} />
+            </View>
 
-              {/* Search */}
-              <Search />
+            {/* Search */}
+            <Search />
 
-              {/* Featured Section */}
-              <View style={styles.featuredSection}>
-                <View style={styles.featuredHeader}>
-                  <Text style={styles.featuredTitle}>Featured</Text>
-                  <TouchableOpacity>
-                    <Text style={styles.seeAll}>See All</Text>
-                  </TouchableOpacity>
-                </View>
-                <FlatList
-                  data={[5, 6, 7]}
-                  renderItem={({ item }) => <FeaturedCard />}
-                  keyExtractor={(item) => item.toString()}
-                  horizontal
-                  bounces={false}
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{
-                    gap: 20,
-                    marginTop: 20,
-                    paddingRight: 20,
-                  }}
-                />
-              </View>
-
-              {/* Recommendations Section */}
+            {/* Featured Section */}
+            <View style={styles.featuredSection}>
               <View style={styles.featuredHeader}>
-                <Text style={styles.featuredTitle}>Our Recommendation</Text>
+                <Text style={styles.featuredTitle}>Featured</Text>
                 <TouchableOpacity>
                   <Text style={styles.seeAll}>See All</Text>
                 </TouchableOpacity>
               </View>
-
-              {/* Filters */}
-              <Filters />
+              <FlatList
+                data={latestProperties ?? []}
+                renderItem={({ item }) => (
+                  <FeaturedCard
+                    item={item}
+                    onPress={() => handleCardPress(item.$id)}
+                  />
+                )}
+                keyExtractor={(item) => item.$id}
+                horizontal
+                bounces={false}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  gap: 20,
+                  marginTop: 20,
+                  paddingRight: 20,
+                }}
+              />
             </View>
-          </>
+
+            {/* Recommendations Header */}
+            <View style={styles.featuredHeader}>
+              <Text style={styles.featuredTitle}>Our Recommendation</Text>
+              <TouchableOpacity>
+                <Text style={styles.seeAll}>See All</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Filters */}
+            <Filters />
+          </View>
         }
         renderItem={({ item }) => (
           <View style={styles.listItem}>
-            <Card />
+            <Card item={item} onPress={() => handleCardPress(item.$id)} />
           </View>
         )}
       />
