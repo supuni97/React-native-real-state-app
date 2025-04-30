@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   label: {
-    fontSize: 10,
+    fontSize: 9,
     marginTop: 4,
   },
   labelFocused: {

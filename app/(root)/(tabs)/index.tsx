@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Search from "@/components/Search";
@@ -16,6 +17,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useAppwrite } from "@/lib/useAppwrite";
 import { getLatestProperties, getProperties } from "@/lib/appwrite";
 import { useEffect } from "react";
+import NoResults from "@/components/NoResults";
 
 export default function Index() {
   const { user } = useGlobalContext();
@@ -55,6 +57,17 @@ export default function Index() {
         keyExtractor={(item) => item.$id}
         horizontal={false}
         numColumns={2}
+        ListEmptyComponent={
+          loading ? (
+            <ActivityIndicator
+              size="large"
+              color="#3B82F6"
+              style={styles.loader}
+            />
+          ) : (
+            <NoResults />
+          )
+        }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatListContainer2}
         columnWrapperStyle={styles.columnWrapper}
@@ -83,24 +96,31 @@ export default function Index() {
                   <Text style={styles.seeAll}>See All</Text>
                 </TouchableOpacity>
               </View>
-              <FlatList
-                data={latestProperties ?? []}
-                renderItem={({ item }) => (
-                  <FeaturedCard
-                    item={item}
-                    onPress={() => handleCardPress(item.$id)}
-                  />
-                )}
-                keyExtractor={(item) => item.$id}
-                horizontal
-                bounces={false}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                  gap: 20,
-                  marginTop: 20,
-                  paddingRight: 20,
-                }}
-              />
+
+              {latestPropertiesLoading ? (
+                <ActivityIndicator size="large" className="text-primary-300" />
+              ) : !latestProperties || latestProperties.length === 0 ? (
+                <NoResults />
+              ) : (
+                <FlatList
+                  data={latestProperties ?? []}
+                  renderItem={({ item }) => (
+                    <FeaturedCard
+                      item={item}
+                      onPress={() => handleCardPress(item.$id)}
+                    />
+                  )}
+                  keyExtractor={(item) => item.$id}
+                  horizontal
+                  bounces={false}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    gap: 20,
+                    marginTop: 20,
+                    paddingRight: 20,
+                  }}
+                />
+              )}
             </View>
 
             {/* Recommendations Header */}
@@ -134,6 +154,9 @@ const styles = StyleSheet.create({
   flatListContainer2: {
     paddingBottom: 128,
     paddingTop: 10,
+  },
+  loader: {
+    marginTop: 20,
   },
   columnWrapper: {
     flex: 1,
